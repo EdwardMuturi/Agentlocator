@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "446384432275",
+    "firebase_url": "https://agentlocator-bbfac.firebaseio.com",
+    "project_id": "agentlocator-bbfac",
+    "storage_bucket": "agentlocator-bbfac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446384432275:android:fce72e39a053c23d",
+        "android_client_info": {
+          "package_name": "com.example.edward.agentlocator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446384432275-rjhh9ejnnlicqtk04rcakrp9a0emb3pe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.edward.agentlocator",
+            "certificate_hash": "dc853f74cd17c96e11b2cddc1f6a15bbe08b91f7"
+          }
+        },
+        {
+          "client_id": "446384432275-492qiqrvjcm017psegluhdhd38r85rmr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPGDSr_RshRjLd9Oe3hyJiKI0X8SsnmrI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "446384432275-492qiqrvjcm017psegluhdhd38r85rmr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Agent Locator</string>
+    <string name="title_activity_maps">Available Agents</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_user_category">Agent Locator</string>
+    <string name="google_maps_key">AIzaSyCguWjiBAlDk3G8rSNTX27UnnPF3ZuP_f8</string>
+    <string name="color_green">#6ab344</string>
+
+    <!-- Strings related to login -->
+
+    <string name="agent_number">Agent Number</string>
+    <string name="float_update_staus">Float Updated Successfully!</string>
+    <string name="prompt_password">Password </string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="no_location_detected">
+        No location detected. Make sure location is enabled on the device.
+    </string>
+</resources>
