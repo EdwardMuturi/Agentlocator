@@ -1,11 +1,14 @@
 package com.example.edward.agentlocator;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,21 +28,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.common.ConnectionResult;
 
+import java.util.Locale;
 
-    public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
-        ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleMap mMap;
     protected GoogleApiClient mGoogleApiClient; //Google play services entry point
-    protected Location mLastLocation; //represents Geographical location
-        protected String mLatitudeLabel;
-        protected String mLongitudeLabel;
-        protected TextView mLatitudeText;
-        protected TextView mLongitudeText;
+    protected Location mLastLocation; //represents Geographical locationprotected String mLatitudeLabel;
+    protected String mLongitudeLabel;
+    protected TextView mLatitudeText;
+    protected TextView mLongitudeText;
+    protected TextView mLocationTestValues;
+    private LocationRequest mLocationRequest;
+
     //private FusedLocationProviderClient mFusedLocationClient;
 
 
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -54,44 +61,37 @@ import com.google.android.gms.common.ConnectionResult;
         buildGoogleApiClient();
 
         Button QueryAgentButton = (Button) findViewById(R.id.btn_query_agent);
-            QueryAgentButton.setOnClickListener(new View.OnClickListener(){
+        QueryAgentButton.setOnClickListener(new View.OnClickListener() {
             @Override
-                public void onClick(View v){
-                    Intent QueryAgentIntent= new Intent(MapsActivity.this, QueryAgentActivity.class);
-                    startActivity(QueryAgentIntent);
-                }
-            });
+            public void onClick(View v) {
+                Intent QueryAgentIntent = new Intent(MapsActivity.this, QueryAgentActivity.class);
+                startActivity(QueryAgentIntent);
+            }
+        });
+        //location debug variable
+        mLocationTestValues = (TextView) findViewById(R.id.txt_test_location);
     }
 
-    protected synchronized void buildGoogleApiClient(){
+    protected synchronized void buildGoogleApiClient() {
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
                     .build();
         }
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+
         LatLng sydney = new LatLng(-1.063152, 36.561739);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Your are Here"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
@@ -99,17 +99,30 @@ import com.google.android.gms.common.ConnectionResult;
 
     protected void onStop() {
         super.onStop();
-        if(mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
 
 
-        @Override
-        public void onConnected( Bundle connectionHint) {
-
-
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }else {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
+    }
 
         @Override
         public void onConnectionSuspended(int i) {
@@ -124,5 +137,7 @@ import com.google.android.gms.common.ConnectionResult;
         @Override
         public void onLocationChanged(Location location) {
 
+           // mLocationTestValues.setText(Double.toString(location.getLatitude()));
+            mLocationTestValues.setText(String.format(Locale.ENGLISH, "%f", location.getLatitude()));
         }
     }

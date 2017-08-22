@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,19 +19,24 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.firebase.client.Firebase;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import org.w3c.dom.Text;
 
+import java.util.Locale;
+
 public class RegisterActivity extends AppCompatActivity implements
-        OnConnectionFailedListener, ConnectionCallbacks {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     protected static final String TAG = "RegisterActivity";
     private FusedLocationProviderClient mFusedLocationClient;
+    private static final int REQUEST_PERMISSION_REQUEST_CODE = 34;
     /*protected EditText mAgentNumber;
     protected EditText mAgentName;
     protected EditText mOperationHours;
@@ -58,10 +64,10 @@ public class RegisterActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        myFirebase= FirebaseDatabase.getInstance().getReference();
+        myFirebase = FirebaseDatabase.getInstance().getReference();
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
-
-        mFusedLocationClient= LocationServices.getFusedLocationProviderClient(this);
+        //Fused Location Provider instance created
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         TextView LoginTextView = (TextView) findViewById(R.id.txt_ExistingUser);
         LoginTextView.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 startActivity(LoginIntent);
             }
         });
+
         Button RegisterButton = (Button) findViewById(R.id.btnRegisterAgent);
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +102,6 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
 
-
     /**
      * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.
      */
@@ -111,6 +117,7 @@ public class RegisterActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+
     }
 
     @Override
@@ -126,12 +133,7 @@ public class RegisterActivity extends AppCompatActivity implements
      */
     @Override
     public void onConnected(Bundle connectionHint) {
-        // Provides a simple way of getting a device's location and is well suited for
-        // applications that do not require a fine-grained location and that do not need location
-        // updates. Gets the best and most recent location currently available, which may be null
-        // in rare cases when a location is not available.
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -140,14 +142,14 @@ public class RegisterActivity extends AppCompatActivity implements
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            mLatitudeText.setText(String.format("%s: %f", mLatitudeLabel,  mLastLocation.getLatitude()));
-            mLongitudeText.setText(String.format("%s: %f", mLongitudeLabel, mLastLocation.getLongitude()));
         } else {
-            Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
-
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLastLocation != null) {
+                mLatitudeText.setText(String.format(Locale.ENGLISH, "%s: %f", mLatitudeLabel, mLastLocation.getLatitude()));
+                mLongitudeText.setText(String.format(Locale.ENGLISH, "%s: %f", mLongitudeLabel, mLastLocation.getLongitude()));
+            }else{
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -166,5 +168,6 @@ public class RegisterActivity extends AppCompatActivity implements
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
     }
+
 
 }
