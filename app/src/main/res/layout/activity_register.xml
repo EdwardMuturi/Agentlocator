@@ -41,12 +41,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
-        android:hint="Latitude"
+        android:hint="Latitude: Waiting for GPS..."
         android:textSize="22sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Longitude"
+        android:hint="Longitude: Waiting for GPS..."
         android:id="@+id/agent_longitude"
         android:textSize="22sp"
         android:textIsSelectable="true"/>

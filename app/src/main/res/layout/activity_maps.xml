@@ -20,5 +20,10 @@
         android:text="Query Agent"
         android:id="@+id/btn_query_agent"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:id="@+id/txt_test_location"
+        android:hint="Display location"/>
 
 </LinearLayout>
