@@ -37,18 +37,14 @@ public class RegisterActivity extends AppCompatActivity implements
     protected static final String TAG = "RegisterActivity";
     private FusedLocationProviderClient mFusedLocationClient;
     private static final int REQUEST_PERMISSION_REQUEST_CODE = 34;
-    /*protected EditText mAgentNumber;
+    protected EditText mAgentNumber;
     protected EditText mAgentName;
     protected EditText mOperationHours;
-    protected Button mRegisterButton;*/
-    /**
-     * Provides the entry point to Google Play services.
-     */
+    protected Button mRegisterButton;
+    
+    // Provides the entry point to Google Play services.
     protected GoogleApiClient mGoogleApiClient;
 
-    /**
-     * Represents a geographical location.
-     */
     protected Location mLastLocation;
 
     protected String mLatitudeLabel;
@@ -89,9 +85,9 @@ public class RegisterActivity extends AppCompatActivity implements
                 mLongitudeLabel = getResources().getString(R.string.longitude_label);
                 mLatitudeText = (TextView) findViewById((R.id.agent_latitude));
                 mLongitudeText = (TextView) findViewById((R.id.agent_longitude));
-                /*mAgentName= (EditText) findViewById(R.id.txt_agent_name);
+                mAgentName= (EditText) findViewById(R.id.txt_agent_name);
                 mAgentNumber= (EditText) findViewById(R.id.txt_agent_number);
-                mOperationHours= (EditText) findViewById(R.id.txt_operationHours);*/
+                mOperationHours= (EditText) findViewById(R.id.txt_operationHours);
 
 
             }
@@ -103,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
     /**
-     * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.
+     * request LocationServices API.
      */
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -134,13 +130,7 @@ public class RegisterActivity extends AppCompatActivity implements
     @Override
     public void onConnected(Bundle connectionHint) {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            
             return;
         } else {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -155,16 +145,12 @@ public class RegisterActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
-        // onConnectionFailed.
         Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
     }
 
 
     @Override
-    public void onConnectionSuspended(int cause) {
-        // The connection to Google Play services was lost for some reason. We call connect() to
-        // attempt to re-establish the connection.
+    public void onConnectionSuspended(int cause) {.
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
     }
