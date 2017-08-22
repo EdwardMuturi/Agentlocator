@@ -51,6 +51,9 @@ public class RegisterActivity extends AppCompatActivity implements
     protected String mLongitudeLabel;
     protected TextView mLatitudeText;
     protected TextView mLongitudeText;
+    protected EditText mAgentName;
+    protected EditText mAgentNumber;
+    protected EditText mOperationHours;
 
     private DatabaseReference myFirebase;
 
